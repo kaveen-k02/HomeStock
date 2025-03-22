@@ -1,7 +1,12 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const dotenv = require("dotenv");
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import dotenv from "dotenv";
+
+//import routes
+import ShoppingListRouter from "./routes/ShoppingList.js"; 
+
+
 
 dotenv.config();
 
@@ -13,6 +18,11 @@ app.use(express.json());
 
 const URL = process.env.MONGODB_URL;
 
+//routes
+app.use("/ShoppingList", ShoppingListRouter);
+
+
+//connect to the database
 mongoose.connect(URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -28,8 +38,6 @@ app.listen(PORT, () => {
     console.log(`Server is up and running on port number: ${PORT}`);
 });
 
-const ShoppingListRouter = require("./routes/ShoppingList.js");
 
-app.use("/ShoppingList", ShoppingListRouter);
 
 

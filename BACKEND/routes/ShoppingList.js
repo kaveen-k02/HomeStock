@@ -1,5 +1,7 @@
-const router = require("express").Router();
-const ShoppingList = require("../models/ShoppingList");
+import express from "express";
+import ShoppingList from "../models/ShoppingListModel.js";
+
+const router = express.Router();
 
 //Utility function to format the date
 const formatDate = (date) => {
@@ -9,7 +11,7 @@ const formatDate = (date) => {
 //CREATE OPERATION
 //http://localhost:8070/ShoppingList/add
 //Adds a new shopping list item to the database
-router.route("/add").post((req, res) => {
+router.post("/add",async (req, res) => {
     try {
         const { itemName, category, unit } = req.body;
         const quantity = Number(req.body.quantity);
@@ -54,7 +56,7 @@ router.route("/add").post((req, res) => {
 //READ OPERATION
 //http://localhost:8070/ShoppingList
 //Retrieves all shopping list items from the database
-router.route("/").get(async (req, res) => {
+router.get("/",async (req, res) => {
     try {
         //Fetch all shopping list items from the database
         const shoppingLists = await ShoppingList.find();
@@ -70,7 +72,7 @@ router.route("/").get(async (req, res) => {
 
 //UPDATE OPERATION
 //http://localhost:8070/ShoppingList/update/id
-router.route("/update/:id").put(async (req, res) => {
+router.put("/update/:id",async (req, res) => {
     try {
         const slID = req.params.id; //Extract the ShoppingList item ID from URL parameters
         const { itemName, category, quantity, unit, addedDate, estimatedPrice } = req.body;
@@ -112,7 +114,7 @@ router.route("/update/:id").put(async (req, res) => {
 
 //DELETE OPERATION
 //http://localhost:8070/ShoppingList/delete/id
-router.route("/delete/:id").delete(async (req, res) => {
+router.delete("/delete/:id",async (req, res) => {
     try {
         const slID = req.params.id; //Extract the ShoppingList item ID from URL parameters
     
@@ -136,7 +138,7 @@ router.route("/delete/:id").delete(async (req, res) => {
 
 //GET OPERATION (To fetch a specific item by ID)
 //http://localhost:8070/ShoppingList/get/id
-router.route("/get/:id").get(async (req, res) => {
+router.get("/get/:id",async (req, res) => {
     try {
         const slID = req.params.id; //Extract the ShoppingList item ID from URL parameters
 
@@ -157,4 +159,4 @@ router.route("/get/:id").get(async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

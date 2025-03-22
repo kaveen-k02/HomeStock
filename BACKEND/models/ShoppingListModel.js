@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const ShoppingListSchema = mongoose.Schema({
+const ShoppingListSchema = new mongoose.Schema({
 
     itemName : {
         type : String,
@@ -36,4 +36,4 @@ const ShoppingListSchema = mongoose.Schema({
 
 const ShoppingList = mongoose.model("ShoppingList", ShoppingListSchema);
 
-module.exports = ShoppingList;
+export default ShoppingList;
