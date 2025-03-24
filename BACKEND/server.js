@@ -4,7 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 //import routes
-import ShoppingListRouter from "./routes/ShoppingList.js"; 
+import ShoppingListRouter from "./routes/ShoppingListModels.js"; 
 
 
 
@@ -37,7 +37,10 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is up and running on port number: ${PORT}`);
 });
+<<<<<<< Updated upstream
 
 
 
 
+=======
+>>>>>>> Stashed changes
