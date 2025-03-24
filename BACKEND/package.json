@@ -2,6 +2,7 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "HomeStock: home inventory, groceries, and household essentials tracking system",
+  "type": "module",  
   "main": "index.js",
   "type":"module",
   "scripts": {

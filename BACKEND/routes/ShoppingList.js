@@ -8,73 +8,54 @@ const formatDate = (date) => {
     return date.toISOString().split('T')[0]; 
 };
 
-//CREATE OPERATION
+// CREATE OPERATION
 //http://localhost:8070/ShoppingList/add
 //Adds a new shopping list item to the database
-router.post("/add",async (req, res) => {
+router.route("/add").post((req, res) => {
     try {
-        const { itemName, category, unit } = req.body;
-        const quantity = Number(req.body.quantity);
-        const estimatedPrice = Number(req.body.estimatedPrice);
-
-        //Format the addedDate
-        let addedDate = req.body.addedDate ? new Date(req.body.addedDate) : new Date(); //Default to current date
-
-        //Validate date format
-        if (isNaN(addedDate.getTime())) {
+        const { itemName, category, unit, quantity, estimatedPrice, addedDate } = req.body;
+        const formattedDate = addedDate ? new Date(addedDate) : new Date(); //Validate date format
+        if (isNaN(formattedDate.getTime())) {
             return res.status(400).json({ error: "Invalid date format" });
         }
-
-        //Format the date to "YYYY-MM-DD"
-        addedDate = formatDate(addedDate); 
 
         //Create a new shopping list document
         const newShoppingList = new ShoppingList({
             itemName,
             category,
-            quantity,
+            quantity: Number(quantity),
             unit,
-            addedDate,
-            estimatedPrice,
+            addedDate: formatDate(formattedDate),
+            estimatedPrice: Number(estimatedPrice),
         });
 
         //Save to database
-        newShoppingList.save()
-            .then(() => res.json({ message: "Shopping list added successfully!" }))
-            .catch((err) => {
-                console.error("Database error:", err);
-                res.status(500).json({ error: "Failed to save shopping list" });
-            });
-
+        await newShoppingList.save();
+        res.json({ message: "Shopping list added successfully!" });
     } catch (error) {
-        console.error("Unexpected error:", error);
+        console.error("Error adding shopping list:", error);
         res.status(500).json({ error: "Something went wrong" });
     }
 });
 
-
-//READ OPERATION
+// READ OPERATION (Get all items)
 //http://localhost:8070/ShoppingList
 //Retrieves all shopping list items from the database
-router.get("/",async (req, res) => {
+router.route("/").get(async (req, res) => {
     try {
-        //Fetch all shopping list items from the database
         const shoppingLists = await ShoppingList.find();
-        
-        //Send the fetched data as a response
-        res.status(200).json(shoppingLists);
-    } catch (err) {
-        console.error("Error fetching shopping lists:", err);
+        res.status(200).json(shoppingLists); //Send the fetched data as a response
+    } catch (error) {
+        console.error("Error fetching shopping lists:", error);
         res.status(500).json({ error: "Failed to fetch shopping lists" });
     }
 });
 
-
-//UPDATE OPERATION
+// UPDATE OPERATION
 //http://localhost:8070/ShoppingList/update/id
-router.put("/update/:id",async (req, res) => {
+router.route("/update/:id").put(async (req, res) => {
     try {
-        const slID = req.params.id; //Extract the ShoppingList item ID from URL parameters
+        const { id } = req.params;
         const { itemName, category, quantity, unit, addedDate, estimatedPrice } = req.body;
 
         const updatedData = {
@@ -82,77 +63,47 @@ router.put("/update/:id",async (req, res) => {
             category,
             quantity: Number(quantity),
             unit,
-            addedDate: addedDate ? new Date(addedDate) : new Date(), //Convert to Date object
+            addedDate: formatDate(new Date(addedDate || new Date())),
             estimatedPrice: Number(estimatedPrice),
         };
 
-        //Validate date format
-        if (isNaN(updatedData.addedDate.getTime())) {
-            return res.status(400).json({ error: "Invalid date format" });
-        }
-
-        //Format the date to "YYYY-MM-DD"
-        updatedData.addedDate = formatDate(updatedData.addedDate);
-
-        //Find and update the shopping list item
-        const updatedItem = await ShoppingList.findByIdAndUpdate(slID, updatedData, { new: true });
-
-        //Check if item exists
-        if (!updatedItem) {
-            return res.status(404).json({ error: "Shopping list item not found" });
-        }
+        const updatedItem = await ShoppingList.findByIdAndUpdate(id, updatedData, { new: true }); //Find and update the shopping list item
+        if (!updatedItem) return res.status(404).json({ error: "Shopping list item not found" }); //Check if item exists
 
         //Send success response
         res.status(200).json({ message: "Shopping list updated successfully!", updatedItem });
-
     } catch (error) {
         console.error("Error updating shopping list:", error);
         res.status(500).json({ error: "Failed to update shopping list" });
     }
 });
 
-
-//DELETE OPERATION
+// DELETE OPERATION
 //http://localhost:8070/ShoppingList/delete/id
-router.delete("/delete/:id",async (req, res) => {
+router.route("/delete/:id").delete(async (req, res) => {
     try {
-        const slID = req.params.id; //Extract the ShoppingList item ID from URL parameters
-    
-        //Find and delete the shopping list item
-        const deletedItem = await ShoppingList.findByIdAndDelete(slID);
-    
-        //Check if the item was found and deleted
-        if (!deletedItem) {
-            return res.status(404).json({ error: "Shopping list item not found" });
-        }
-    
+        const { id } = req.params;
+        const deletedItem = await ShoppingList.findByIdAndDelete(id); //Find and delete the shopping list item
+        if (!deletedItem) return res.status(404).json({ error: "Shopping list item not found" }); //Check if the item was found and deleted
+
         //Send success response
         res.status(200).json({ message: "Shopping list item deleted successfully!", deletedItem });
-    
     } catch (error) {
         console.error("Error deleting shopping list item:", error);
         res.status(500).json({ error: "Failed to delete shopping list item" });
     }
 });
 
-
-//GET OPERATION (To fetch a specific item by ID)
+// GET OPERATION (Get a specific item by ID)
 //http://localhost:8070/ShoppingList/get/id
-router.get("/get/:id",async (req, res) => {
+router.route("/get/:id").get(async (req, res) => {
     try {
-        const slID = req.params.id; //Extract the ShoppingList item ID from URL parameters
-
-        //Find the shopping list item by its ID
-        const shoppingListItem = await ShoppingList.findById(slID);
-
-        //Check if the item exists
-        if (!shoppingListItem) {
-            return res.status(404).json({ error: "Shopping list item not found" });
-        }
+        const { id } = req.params;
+        const shoppingListItem = await ShoppingList.findById(id); //Find the shopping list item by its ID
+        if (!shoppingListItem) return res.status(404).json({ error: "Shopping list item not found" }); //Check if the item exists
 
         //Send the fetched item as a response
         res.status(200).json({ message: "Shopping list fetched successfully!", shoppingListItem });
-
     } catch (error) {
         console.error("Error fetching shopping list item:", error);
         res.status(500).json({ error: "Failed to fetch shopping list item" });

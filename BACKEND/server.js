@@ -1,12 +1,7 @@
-import express from "express";
-import mongoose from "mongoose";
-import cors from "cors";
-import dotenv from "dotenv";
-
-//import routes
-import ShoppingListRouter from "./routes/ShoppingList.js"; 
-
-
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const dotenv = require("dotenv");
 
 dotenv.config();
 
@@ -38,6 +33,8 @@ app.listen(PORT, () => {
     console.log(`Server is up and running on port number: ${PORT}`);
 });
 
+const ShoppingListRouter = require("./routes/ShoppingList.js");
 
+app.use("/ShoppingList", ShoppingListRouter);
 
 
