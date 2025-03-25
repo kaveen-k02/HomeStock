@@ -1,9 +1,12 @@
+import React from "react";
+import HomeStockLanding from "./pages/LandingPage";
+
 
 
 function App() {
   return (
     <div className="App">
-      <h1>Hello React</h1>
+      <HomeStockLanding />
     </div>
   );
 }
