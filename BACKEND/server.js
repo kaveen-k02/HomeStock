@@ -4,7 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 //import routes
-import ShoppingListRouter from "./routes/ShoppingListModels.js"; 
+import ShoppingListRouter from "./routes/ShoppingListRoutes.js"; 
 
 
 
