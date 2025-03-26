@@ -1,13 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomeStockLanding from "./pages/LandingPage";
-
+import Dashboard from "./pages/Dashboard";
+import MainNavbar from "./components/MainNavbar";
+import BrandSuggestions from "./pages/BrandSuggestions";
 
 
 function App() {
+
+  const [filter, setFilter] = useState("");
+
   return (
-    <div className="App">
-      <HomeStockLanding />
-    </div>
+    <Router>
+      <div className="App">
+        {/* Main Navbar (fixed at the top) */}
+        <MainNavbar />
+        
+        {/* Routes */}
+        <div className="ml-60"> {/* Apply margin-left to move content right */}
+          <Routes>
+            <Route path="/" element={<HomeStockLanding />} />
+            <Route
+              path="/*"
+              element={
+                <>
+                  <Routes>
+                    <Route path="/dashboard" element={<Dashboard filter={filter} />} />
+                    <Route path="/brand-suggestions" element={<BrandSuggestions filter={filter} />} />
+
+                    
+                  </Routes>
+                </>
+              }
+            />
+          </Routes>
+        </div>
+      </div>
+    </Router>
   );
 }
 
