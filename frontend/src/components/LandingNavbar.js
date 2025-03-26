@@ -19,6 +19,10 @@ const Navbar = ({ user, handleLogout }) => {
         <Link to="/" className="hover:text-accent transition">Home</Link>
         <Link to="/inventory" className="hover:text-accent transition">Inventory</Link>
         <Link to="/shopping-list" className="hover:text-accent transition">Shopping List</Link>
+        <Link to="/usage-history" className="hover:text-accent transition">Usage History</Link>
+        <Link to="/feedback" className="hover:text-accent transition">Feedback</Link>
+        <Link to="/wastage-tracker" className="hover:text-accent transition">Wastage Tracker</Link>
+        <Link to="/brand-suggestions" className="hover:text-accent transition">Brand Suggestions</Link>
       </nav>
 
       {/* User & Logout */}
