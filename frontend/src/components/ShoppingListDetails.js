@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Typography } from "@mui/material";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import ShoppingListForm from "./ShoppingListForm";
 
 const ShoppingListDetails = ({ item, onDelete, onEdit }) => {
   const [showEditModal, setShowEditModal] = useState(false);

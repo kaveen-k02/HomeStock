@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomeStockLanding from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard";
 import MainNavbar from "./components/MainNavbar";
-import BrandSuggestions from "./pages/BrandSuggestions";
+//import BrandSuggestions from "./pages/BrandSuggestions";
+import ShoppingListDisplay from "./pages/ShoppingListDisplay";
 
 
 function App() {
@@ -26,7 +27,7 @@ function App() {
                 <>
                   <Routes>
                     <Route path="/dashboard" element={<Dashboard filter={filter} />} />
-                    <Route path="/brand-suggestions" element={<BrandSuggestions filter={filter} />} />
+                    <Route path="/shopping-list" element={<ShoppingListDisplay />} />
 
                     
                   </Routes>
