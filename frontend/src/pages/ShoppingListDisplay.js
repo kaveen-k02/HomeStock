@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import ShoppingListDetails from "./ShoppingListDetails";
-import ShoppingListForm from "./ShoppingListForm";
+import ShoppingListDetails from "../components/ShoppingListDetails";
+import ShoppingListForm from "../components/ShoppingListForm";
 
 const ShoppingListDisplay = () => {
   const [shoppingList, setShoppingList] = useState([]);
