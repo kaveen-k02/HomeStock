@@ -4,7 +4,7 @@
   "description": "HomeStock: home inventory, groceries, and household essentials tracking system",
   "type": "module",  
   "main": "index.js",
-  "type":"module",
+ 
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"

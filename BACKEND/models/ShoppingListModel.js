@@ -34,6 +34,5 @@ const ShoppingListSchema = mongoose.Schema({
 
 })
 
-const ShoppingList = mongoose.model("ShoppingList", shoppingListSchema);
-
-module.exports = ShoppingList;
+const ShoppingList = mongoose.model("ShoppingList", ShoppingListSchema);
+export default ShoppingList;
