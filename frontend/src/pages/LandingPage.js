@@ -1,10 +1,14 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 import inventoryImage from "../images/inventoryImage.jpg";
 import shoppingImage from "../images/shopping.jpg";
 import feedbackImage from "../images/feedback.jpg";
 import trackingImage from "../images/tracking.jpg";
 import brandImage from "../images/brand.jpg";
 import storeImage from "../images/store.jpg";
+import LoginPage from "./LoginPage";
+import SignupPage from "./SignupPage";
 
 const LandingPage = () => {
   return (
@@ -15,12 +19,16 @@ const LandingPage = () => {
 
         <h1 className="text-3xl font-bold text-white">SmartShopper</h1>
         <div>
+          <Link to= "/login">
           <button className="bg-accent text-white font-bold  border-primary px-5 py-3 rounded-full hover:bg-primaryDark transition shadow-lg text-lg">
             Login
           </button>
+          </Link>
+          <Link to= "/signup">
           <button className="bg-white text-accent font-bold border-4 border-accent px-5 py-3 rounded-full hover:bg-primaryDark transition shadow-lg text-lg">
             Sign Up
           </button>
+          </Link>
         </div>
       </nav>
 
@@ -40,7 +48,7 @@ const LandingPage = () => {
 
       {/* About the App */}
       <section className="w-full text-center mt-10 px-4 md:px-6">
-        <h3 className="text-3xl font-bold text mb-3">Why HomeStock?</h3>
+        <h3 className="text-3xl font-bold text mb-3">Why SmartShopper?</h3>
         <p className="text-xl text-background max-w-3xl mx-auto">
           Managing home inventory has never been easier! HomeStock helps 
           you track product usage, automate shopping lists, and find the 
