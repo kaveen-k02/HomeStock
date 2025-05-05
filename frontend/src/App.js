@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 
 import LoginPage from "./pages/LoginPage";
@@ -16,14 +16,13 @@ import ShoppingInsights from "./pages/ShoppingInsights";
 function AppContent() {
   const location = useLocation();
 
-  // Pages where MainNavbar should NOT be shown
   const hideNavbarRoutes = ["/", "/login", "/signup"];
   const shouldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
 
   return (
     <div className="App">
       {shouldShowNavbar && <MainNavbar />}
-      <div className={shouldShowNavbar ? "ml-60" : ""}> {/* Apply margin only if navbar is visible */}
+      <div className={shouldShowNavbar ? "ml-60" : ""}>
         <Routes>
           <Route path="/" element={<HomeStockLanding />} />
           <Route path="/login" element={<LoginPage />} />
