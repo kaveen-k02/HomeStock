@@ -20,38 +20,11 @@ const UserSchema = new mongoose.Schema(
       required: [true, "Password is required"],
       trim: true,
     },
-    // Optional human-readable address
-    address: {
-      type: String,
-      trim: true,
-    },
-    // Store the user's location as GeoJSON
-    permanentLocation: {
-      type: {
-        type: String,
-        enum: ["Point"],
-        default: "Point",
-      },
-      coordinates: {
-        type: [Number], // [longitude, latitude]
-        required:true,
-        validate: {
-          validator: function (coords) {
-            return coords.length === 2 && coords.every((num) => typeof num === "number");
-          },
-          message: "Coordinates must be an array of two numbers: [longitude, latitude]",
-        },
-        default: undefined, // optional by default
-      },
-    },
   },
   {
     timestamps: true,
   }
 );
-
-// Create 2dsphere index for geospatial queries
-UserSchema.index({ permanentLocation: "2dsphere" });
 
 // Optionally hash password before saving (if needed)
 UserSchema.pre("save", async function (next) {

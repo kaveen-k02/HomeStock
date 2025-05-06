@@ -19,7 +19,7 @@ app.use(express.json());
 const URL = process.env.MONGODB_URL;
 
 //routes
-app.use("/api/auth", AuthRoutes);
+app.use("/auth", AuthRoutes);
 app.use("/ShoppingList", ShoppingListRouter);
 
 

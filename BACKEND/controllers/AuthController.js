@@ -1,45 +1,36 @@
 import User from "../models/UserModel.js";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";  
 
-
-// Signup function
 export const signup = async (req, res) => {
-  const { userName, email, password, permanentLocation } = req.body;
-
-  // Validate permanentLocation format
-  if (
-    !permanentLocation ||
-    permanentLocation.type !== "Point" ||
-    !Array.isArray(permanentLocation.coordinates)
-  ) {
-    return res.status(400).json({ error: "Invalid location format" });
-  }
-
   try {
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ error: "User already exists!" });
+    const { userName, email, password } = req.body;
+
+    // Validate input fields
+    if (!userName || !email || !password) {
+      return res.status(400).json({ message: "All fields are required." });
     }
 
-    // Create and save user (password will be hashed in User model)
+    // Check if the email already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ message: "Email already registered." });
+    }
+
+    // Create new user instance
     const newUser = new User({
       userName,
       email,
-      password, // Raw password — model hashes it
-      permanentLocation: {
-        type: "Point",
-        coordinates: permanentLocation.coordinates,
-      },
+      password, // Hashing will be handled by pre-save hook in the model
     });
 
+    // Save the new user
     await newUser.save();
+    res.status(201).json({ message: "User registered successfully" });
 
-    res.status(201).json({ message: "User registered successfully!" });
   } catch (error) {
-    console.error("Error during signup:", error);
-    res.status(500).json({ error: "Server error during registration" });
+    console.error("Signup Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -58,12 +49,20 @@ export const login = async (req, res) => {
       return res.status(401).json({ error: "Invalid email or password." });
     }
 
+    // Create JWT token for the user
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
 
-    // Send userName along with token
-    res.status(200).json({ token, userName: user.userName, message: "Login successful!" });
+    res.status(200).json({ 
+      token, 
+      user: {
+        id: user._id,
+        userName: user.userName,
+        email: user.email,
+      },
+      message: "Login successful!" 
+    });
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ error: "Server error during login" });
