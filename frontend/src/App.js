@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 
+
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import HomeStockLanding from "./pages/LandingPage";
@@ -16,6 +17,7 @@ import ShoppingInsights from "./pages/ShoppingInsights";
 function AppContent() {
   const location = useLocation();
 
+  // List of routes where MainNavbar should NOT be shown
   const hideNavbarRoutes = ["/", "/login", "/signup"];
   const shouldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
 
