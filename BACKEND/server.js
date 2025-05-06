@@ -5,10 +5,8 @@ import dotenv from "dotenv";
 
 //import routes
 import AuthRoutes from "./routes/AuthRoutes.js"; 
-import UserRoutes from "./routes/UserRoutes.js"
 import ShoppingListRouter from "./routes/ShoppingListRoutes.js"; 
-import InventoryRoutes from "./routes/InventoryRoutes.js";
-import WastageRoutes from "./routes/WastageRoutes.js"; 
+
 
 dotenv.config();
 
@@ -21,11 +19,9 @@ app.use(express.json());
 const URL = process.env.MONGODB_URL;
 
 //routes
-app.use("/api/auth", AuthRoutes); 
-app.use("/api/user", UserRoutes);
+app.use("/api/auth", AuthRoutes);
 app.use("/ShoppingList", ShoppingListRouter);
-app.use("/api/inventory", InventoryRoutes);
-app.use("/Wastage", WastageRoutes)
+
 
 
 //connect to the database
