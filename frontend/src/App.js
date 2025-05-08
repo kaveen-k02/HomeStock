@@ -8,11 +8,11 @@ import HomeStockLanding from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard";
 import MainNavbar from "./components/MainNavbar";
 import ShoppingListDisplay from "./pages/ShoppingListDisplay";
-import NearbyStores from "./pages/NearbyStores";
 import BrandSuggestionsPage from "./pages/BrandSuggestionsPage";
 import InventoryManagement from "./pages/InventoryManagement";
 import WastagePage from "./pages/WastagePage";
 import ShoppingInsights from "./pages/ShoppingInsights";
+import NearbyStoresPage from "./pages/NearbyStoresPage";
 
 function AppContent() {
   const location = useLocation();
@@ -31,8 +31,8 @@ function AppContent() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/shopping-list" element={<ShoppingListDisplay />} />
-          <Route path="/nearby-stores" element={<NearbyStores />} />
           <Route path="/brand-suggestions" element={<BrandSuggestionsPage />} />
+          <Route path="/nearby-stores" element={<NearbyStoresPage />} />
           <Route path="/inventory" element={<InventoryManagement />} />
           <Route path="/wastage" element={<WastagePage />} />
           <Route path="/shopping-insights" element={<ShoppingInsights />} />
