@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 //import routes
 import AuthRoutes from "./routes/AuthRoutes.js"; 
 import ShoppingListRouter from "./routes/ShoppingListRoutes.js"; 
+import PlacesRoutes from "./routes/PlacesRoutes.js";
 
 
 dotenv.config();
@@ -21,6 +22,7 @@ const URL = process.env.MONGODB_URL;
 //routes
 app.use("/auth", AuthRoutes);
 app.use("/ShoppingList", ShoppingListRouter);
+app.use('/nearby-stores', PlacesRoutes);
 
 
 
