@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { format } from 'date-fns';
-import { jsPDF } from "jspdf";  // Changed to named import
-import 'jspdf-autotable';  // Import as side effect
+import { format } from 'date-fns'; // Use the format from date-fns directly
+import { jsPDF } from "jspdf";  
+import 'jspdf-autotable';  
 import InventoryForm from './InventoryForm';
 
 const InventoryList = ({ onEdit }) => {
@@ -14,7 +14,7 @@ const InventoryList = ({ onEdit }) => {
     
     const fetchInventory = useCallback(async () => {
         try {
-            const response = await fetch('http://localhost:8070/api/inventory');
+            const response = await fetch('http://localhost:8070/inventory');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -68,6 +68,7 @@ const InventoryList = ({ onEdit }) => {
             const tableData = filteredInventory.map(item => [
                 item.productName,
                 item.category,
+                item.expiryDate ? format(new Date(item.expiryDate), 'MMMM d, yyyy') : 'N/A',
                 item.totalQuantity.toString(),
                 item.unit,
                 `$${item.totalValue.toFixed(2)}`
@@ -76,7 +77,7 @@ const InventoryList = ({ onEdit }) => {
             // Add table
             doc.autoTable({
                 startY: 45,
-                head: [['Product Name', 'Category', 'Total Quantity', 'Unit', 'Value']],
+                head: [['Product Name', 'Category','Expired Date', 'Total Quantity', 'Unit', 'Value']],
                 body: tableData,
                 theme: 'striped',
                 headStyles: { fillColor: [0, 128, 128] },
@@ -93,7 +94,7 @@ const InventoryList = ({ onEdit }) => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this item?')) {
             try {
-                const response = await fetch(`http://localhost:8070/api/inventory/${id}`, { 
+                const response = await fetch(`http://localhost:8070/inventory/${id}`, { 
                     method: 'DELETE'
                 });
                 if (!response.ok) {
@@ -104,6 +105,17 @@ const InventoryList = ({ onEdit }) => {
                 console.error('Error deleting item:', error);
             }
         }
+    };
+
+    const formatDate = (dateString) => {
+        if (!dateString) return 'N/A'; 
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            weekday: 'short', 
+            year: 'numeric',  
+            month: 'long',    
+            day: 'numeric'    
+        });
     };
 
     const handleSave = async (savedItem) => {
@@ -168,6 +180,7 @@ const InventoryList = ({ onEdit }) => {
                         <tr>
                             <th className="px-6 py-4 text-left text-lg font-bold text-white">Product Name</th>
                             <th className="px-6 py-4 text-left text-lg font-bold text-white">Category</th>
+                            <th className="px-6 py-4 text-left text-lg font-bold text-white whitespace-nowrap">Expired Date</th>
                             <th className="px-6 py-4 text-left text-lg font-bold text-white">Total Quantity</th>
                             <th className="px-6 py-4 text-left text-lg font-bold text-white">Unit</th>
                             <th className="px-6 py-4 text-left text-lg font-bold text-white">Value</th>
@@ -182,6 +195,7 @@ const InventoryList = ({ onEdit }) => {
                             >
                                 <td className="px-6 py-4 text-accent font-semibold">{item.productName}</td>
                                 <td className="px-6 py-4 text-accent">{item.category}</td>
+                                <td className="px-6 py-4 text-accent whitespace-nowrap">{item.stock[0]?.expiryDate ? formatDate(item.stock[0].expiryDate) : 'N/A'}</td>
                                 <td className="px-6 py-4 text-accent">{item.totalQuantity}</td>
                                 <td className="px-6 py-4 text-accent">{item.unit}</td>
                                 <td className="px-6 py-4 text-accent">${item.totalValue.toFixed(2)}</td>
@@ -189,13 +203,13 @@ const InventoryList = ({ onEdit }) => {
                                     <div className="flex gap-3">
                                         <button
                                             onClick={() => onEdit(item)}
-                                            className="bg-accent text-white font-bold px-4 py-2 rounded-full hover:bg-teal-700 transition shadow-md"
+                                            className="bg-accent text-white font-bold px-3 py-2 rounded-full hover:bg-teal-700 transition shadow-md"
                                         >
                                             Edit
                                         </button>
                                         <button
                                             onClick={() => handleDelete(item._id)}
-                                            className="bg-red-500 text-white font-bold px-4 py-2 rounded-full hover:bg-red-600 transition shadow-md"
+                                            className="bg-red-500 text-white font-bold px-3 py-2 rounded-full hover:bg-red-600 transition shadow-md"
                                         >
                                             Delete
                                         </button>
