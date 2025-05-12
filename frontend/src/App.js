@@ -1,5 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import "leaflet/dist/leaflet.css";
+
 
 
 import LoginPage from "./pages/LoginPage";
@@ -12,6 +14,9 @@ import BrandSuggestionsPage from "./pages/BrandSuggestionsPage";
 import InventoryManagement from "./pages/InventoryManagement";
 import WastagePage from "./pages/WastagePage";
 import ShoppingInsights from "./pages/ShoppingInsights";
+import FeedbackForm from "./components/FeedbackForm";
+import FeedbackList from "./components/FeedbackList";
+import UserFeedback from "./components/UserFeedback";
 import NearbyStoresPage from "./pages/NearbyStoresPage";
 
 function AppContent() {
@@ -36,6 +41,9 @@ function AppContent() {
           <Route path="/inventory" element={<InventoryManagement />} />
           <Route path="/wastage" element={<WastagePage />} />
           <Route path="/shopping-insights" element={<ShoppingInsights />} />
+          <Route path="/feedback" element={<FeedbackList />} />
+          <Route path="/feedback/new" element={<FeedbackForm />} />
+          <Route path="/feedback/user/:userId" element={<UserFeedback />} />
         </Routes>
       </div>
     </div>

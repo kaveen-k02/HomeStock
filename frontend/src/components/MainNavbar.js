@@ -1,6 +1,6 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
-import logo from "../images/Logo.jpeg";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import logo from "../images/logo.jpeg";
 
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -16,7 +16,7 @@ const navItems = [
   { path: "/dashboard", label: "Dashboard", icon: <DashboardIcon /> },
   { path: "/inventory", label: "Inventory", icon: <InventoryIcon /> },
   { path: "/shopping-list", label: "Shopping List", icon: <ShoppingCartIcon /> },
-  { path: "/feed-back", label: "Feedback", icon: <FeedbackIcon /> },
+  { path: "/feedback", label: "Feedback", icon: <FeedbackIcon /> },
   { path: "/wastage", label: "Wastage Tracker", icon: <WarningIcon /> },
   { path: "/brand-suggestions", label: "Brand Suggestions", icon: <StarIcon /> },
   { path: "/nearby-stores", label: "Nearby Stores", icon: <StoreIcon /> },
@@ -25,17 +25,18 @@ const navItems = [
 
 const MainNavbar = () => {
   const location = useLocation();
+  const navigate = useNavigate(); 
 
   const handleLogout = () => {
-    console.log("Logging out..."); // Replace with actual logout function
+    navigate('/');
   };
 
   return (
-    <header className="fixed top-0 left-0 w-60 bg-background h-full text-primary px-4 py-2 font-sans overflow-y-auto shadow-md flex flex-col justify-between">
+    <header className="fixed top-0 left-0 w-60 bg-background h-full text-primary px-4 font-sans overflow-y-auto shadow-md flex flex-col justify-between">
       {/* Logo Section */}
       <div>
-        <div className="flex justify-center items-center py-2 ">
-          <img src={logo} alt="HomeStock Logo" width="50px" height="50px" />
+        <div className="flex justify-center items-center ">
+          <img src={logo} alt="HomeStock Logo" width="160px" height="50px" />
         </div>
 
         {/* Navigation Links */}

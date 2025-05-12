@@ -64,16 +64,23 @@ const InventoryForm = ({ item = null, onClose, onSave }) => {
 
     const validateForm = () => {
         const newErrors = {};
+
         if (!formData.userName) newErrors.userName = 'Username is required';
         if (!formData.productName) newErrors.productName = 'Product name is required';
         if (!formData.category) newErrors.category = 'Category is required';
         if (!formData.unit) newErrors.unit = 'Unit is required';
         if (!formData.purchasePrice) newErrors.purchasePrice = 'Purchase price is required';
-        
-        const stockErrors = formData.stock.some(entry => 
-            !entry.quantity || !entry.expiryDate || entry.quantity <= 0
-        );
-        if (stockErrors) newErrors.stock = 'All stock entries must have valid quantity and expiry date';
+
+        // Validate stock entries individually
+        const stockErrors = formData.stock.map((entry, index) => {
+            const entryErrors = {};
+            if (!entry.quantity || entry.quantity <= 0) entryErrors.quantity = 'Quantity must be greater than 0';
+            if (!entry.expiryDate) entryErrors.expiryDate = 'Expiry date is required';
+            return entryErrors;
+        });
+
+        const hasStockErrors = stockErrors.some(error => Object.keys(error).length > 0);
+        if (hasStockErrors) newErrors.stock = stockErrors;
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -85,8 +92,8 @@ const InventoryForm = ({ item = null, onClose, onSave }) => {
 
         try {
             const url = item 
-                ? `http://localhost:8070/api/inventory/${item._id}` 
-                : 'http://localhost:8070/api/inventory';
+                ? `http://localhost:8070/Inventory/${item._id}` 
+                : 'http://localhost:8070/Inventory';
             const method = item ? 'PUT' : 'POST';
 
             const response = await fetch(url, {
@@ -161,6 +168,7 @@ const InventoryForm = ({ item = null, onClose, onSave }) => {
                         />
                         {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category}</p>}
                     </div>
+
 
                     <div>
                         <label className="block text-sm font-bold text-background mb-1">Unit</label>
